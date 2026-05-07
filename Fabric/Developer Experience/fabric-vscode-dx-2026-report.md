@@ -1,24 +1,32 @@
 # Microsoft Fabric Developer Experience in VS Code (May 2026)
 
-> **Key finding:** Fabric now has a coherent VS Code story built around three Microsoft-published extensions (Microsoft Fabric, Fabric Data Engineering, Fabric User data functions) plus a GA TMDL extension, the GA `fab` CLI (`ms-fabric-cli`), and the GA `fabric-cicd` Python library. Workspace Git integration covers the major item types, and PBIR is rolling out as the default Power BI report format.
+> **Key finding:** Fabric now has a coherent VS Code story built around four Microsoft-published extensions (Microsoft Fabric, Fabric Data Engineering, Fabric MCP, Fabric Skills for Copilot CLI) plus a GA TMDL extension, the GA `fab` CLI (`ms-fabric-cli`), and the GA `fabric-cicd` Python library. Workspace Git integration covers the major item types, and PBIR is rolling out as the default Power BI report format.
 > **Confidence:** HIGH for tooling state and install steps; MODERATE for PBIP GA timing (Microsoft says "planned for 2026" but not yet GA at this writing) and for which items are GA vs. preview in Git integration (the Learn list explicitly mixes both).
 
 ---
 
 ## 1. Fabric VS Code extensions (current and recommended)
 
-As of May 2026 there are **three Microsoft-published Fabric extensions** plus the **TMDL** language extension that together form the recommended stack ([Microsoft Fabric VS Code extensions, Learn](https://learn.microsoft.com/en-us/fabric/data-engineering/set-up-fabric-vs-code-extension)):
+As of May 2026 there are **four Microsoft-published Fabric extensions** plus the **TMDL** language extension that together form the recommended stack ([Microsoft Fabric VS Code extensions, Learn](https://learn.microsoft.com/en-us/fabric/data-engineering/set-up-fabric-vs-code-extension)):
 
 | Extension | Marketplace ID | Role | Auth |
 |---|---|---|---|
 | **Microsoft Fabric** | `fabric.vscode-fabric` | Core: workspace explorer, create/delete/rename items, clone Git-enabled workspaces, Fabric MCP server for Copilot Chat | `Fabric: Sign in` -> browser; uses VS Code Accounts ([Marketplace](https://marketplace.visualstudio.com/items?itemName=fabric.vscode-fabric)) |
 | **Fabric Data Engineering** (formerly Synapse VS Code) | `SynapseVSCode.synapse` | Notebooks (Local + VFS modes), Spark Job Definitions, Lakehouse explorer, Environments | `Fabric Data Engineering: Sign In` -> browser ([Get started, Learn](https://learn.microsoft.com/en-us/fabric/data-engineering/setup-vs-code-extension)) |
-| **Fabric User data functions** | `fabric.vscode-fabric-functions` | Author/run/debug Python UDFs locally with breakpoints; publish to workspace | Inherits from Microsoft Fabric extension ([Marketplace](https://marketplace.visualstudio.com/items?itemName=fabric.vscode-fabric-functions)) |
+| **Fabric MCP** | `fabric.fabric-mcp` | Model Context Protocol server enabling AI agents and tools (e.g., Copilot Chat, Claude, custom agents) to interact with Fabric workspaces programmatically | Inherits from Microsoft Fabric extension ([Marketplace](https://marketplace.visualstudio.com/items?itemName=fabric.fabric-mcp)) |
+| **Fabric Skills for Copilot CLI** | `fabric.copilot-cli-skills` | Adds Fabric-aware skills to GitHub Copilot CLI for workspace management, notebook authoring, deployment, and diagnostics directly from the terminal | Inherits from Microsoft Fabric extension ([Marketplace](https://marketplace.visualstudio.com/items?itemName=fabric.copilot-cli-skills)) |
 | **TMDL** (language support) | `analysis-services.TMDL` | Semantic highlighting, autocomplete, diagnostics, formatting for `.tmdl` files; GA Nov 2025 ([Marketplace](https://marketplace.visualstudio.com/items?itemName=analysis-services.TMDL); [GitHub](https://github.com/microsoft/vscode-tmdl)) |
 
-**Install:** Extensions view -> search by name -> Install. Prerequisites: VS Code, the Jupyter extension (for Data Engineering), Python 3.11 + Azure Functions Core Tools v4 + ODBC Driver 18 (for User Data Functions) ([UDF quickstart, Learn](https://learn.microsoft.com/en-us/fabric/data-engineering/user-data-functions/create-user-data-functions-vs-code)).
+**Install:** Extensions view -> search by name -> Install. Prerequisites: VS Code, the Jupyter extension (for Data Engineering).
 
-**Auth model:** All three Fabric extensions use interactive Microsoft Entra (browser) sign-in via VS Code Accounts; credentials are cached in the OS secure storage. Tenant switching is built into the status bar.
+**Auth model:** All Fabric extensions use interactive Microsoft Entra (browser) sign-in via VS Code Accounts; credentials are cached in the OS secure storage. Tenant switching is built into the status bar.
+
+**Companion CLI tools:**
+
+| Tool | Install | Role | Auth |
+|---|---|---|---|
+| **GitHub Copilot CLI** | `gh extension install github/gh-copilot` (requires `gh` CLI) | AI-powered terminal assistant for code generation, shell commands, and Git workflows; pairs with Fabric Skills extension for Fabric-aware assistance | GitHub auth via `gh auth login` ([GitHub Copilot in the CLI docs](https://docs.github.com/en/copilot/github-copilot-in-the-cli)) |
+| **Fabric CLI (`fab`)** | `pip install ms-fabric-cli` (Python 3.10-3.13) | File-system-style wrapper over Fabric REST/OneLake APIs for workspace provisioning, item CRUD, job execution, and scripted CI/CD | `fab auth login` -> browser; supports SPN (`-u`/`-p`) and managed identity (`--identity`) ([GitHub](https://github.com/microsoft/fabric-cli); [PyPI](https://pypi.org/project/ms-fabric-cli/)) |
 
 ## 2. Notebook sync workflow
 
